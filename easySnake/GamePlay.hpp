@@ -13,6 +13,13 @@ namespace easysnake
 	static int score = 0;
 	static int loadCount = 0;
 
+	// window shake effect's value
+	static int shakeDistance = 2;
+	static RECT rectBuffer;
+	static HWND window = NULL, windowOld = NULL;
+	static int windowX, windowY, windowWidth, windowHight;
+	static int shakeCount = 0;
+
 	// useless , but I'm too lazy to delete this
 	enum MapMark {
 		Apple = -2,Border,Empty,SnakeHead,SnakeBody,SnakeTail

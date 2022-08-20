@@ -140,6 +140,27 @@ void easysnake::GamePlay::computing() noexcept
 	static int i, j;
 	int max = 0;
 
+	// realize window shake effect
+	window = GetForegroundWindow();
+	if (window != windowOld)
+	{
+		GetWindowRect(window, &rectBuffer);
+		windowX = rectBuffer.left;
+		windowY = rectBuffer.top;
+		windowWidth = rectBuffer.right - windowX;
+		windowHight = rectBuffer.bottom - windowY;
+		windowOld = window;
+	}
+	switch (shakeCount)
+	{
+	case 4:MoveWindow(window, windowX - shakeDistance, windowY, windowWidth, windowHight, TRUE); break;
+	case 3:MoveWindow(window, windowX - shakeDistance, windowY - shakeDistance, windowWidth, windowHight, TRUE); break;
+	case 2:MoveWindow(window, windowX, windowY - shakeDistance, windowWidth, windowHight, TRUE); break;
+	case 1:MoveWindow(window, windowX, windowY, windowWidth, windowHight, TRUE); break;
+	default:break;
+	}
+	if (shakeCount > 0) shakeCount--;
+
 	// all marks ++
 	// Apple = -2, Border, Empty, SnakeHead, SnakeBody, SnakeTail
 	for (i = 1; i < MAP_SIZE_Y - 1; i++)
@@ -196,10 +217,14 @@ void easysnake::GamePlay::computing() noexcept
 	// snake eat
 	if (map[newHeadPosY][newHeadPosX] == Apple)
 	{
+		score++;
+
 		// sound
 		PlaySound(TEXT("eat_01.wav"), nullptr, SND_FILENAME | SND_ASYNC);
 
-		score++;
+		// enable window shake effect
+		shakeCount = 4;
+
 		map[applePosX][applePosY] = Empty;
 		applePosX = rand() % (MAP_SIZE_Y - 5) + 2;
 		applePosY = rand() % (MAP_SIZE_X - 5) + 2;
