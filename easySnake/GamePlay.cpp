@@ -13,7 +13,7 @@ GamePlay::GamePlay(int fps, const char* title) : delay(1.0f / fps)
 		initgraph(WINDOW_SIZE_W, WINDOW_SIZE_H + 20);
 		loadCount++;
 	}
-	
+
 	SetWindowText(GetHWnd(), L"Easy Snake");
 	foreachMarkDo([](int i, int j, int& mark) {
 		if (i == 0)
@@ -52,7 +52,6 @@ GamePlay::~GamePlay()
 	//closegraph();
 }
 
-
 void easysnake::GamePlay::foreachMarkDo(std::function<void(int, int, int&)> func) noexcept
 {
 	std::array<int, 50>* line;
@@ -65,7 +64,6 @@ void easysnake::GamePlay::foreachMarkDo(std::function<void(int, int, int&)> func
 		}
 	}
 }
-
 
 // C-Style array version
 /*
@@ -212,7 +210,7 @@ void easysnake::GamePlay::computing() noexcept
 	// snake die
 	if (map[newHeadPosY][newHeadPosX] > 0 || map[newHeadPosY][newHeadPosX] == -1)
 	{
-		outtextxy(75, MAP_SIZE_Y * 10 + 2,L"Game Over! But for some reason you will respawn in 3 seconds...");
+		outtextxy(60, MAP_SIZE_Y * 10 + 2,L"Game Over! But for some reason you will respawn in 3 seconds...");
 		for (int i = 0; i < 3; i++)
 		{
 			PlaySound(TEXT("score.wav"), nullptr, SND_FILENAME | SND_ASYNC);
@@ -223,8 +221,7 @@ void easysnake::GamePlay::computing() noexcept
 		gameShouldBeClosed = true;
 		//exit(0);
 	}
-	else
-		map[newHeadPosY][newHeadPosX] = SnakeHead;
+	else map[newHeadPosY][newHeadPosX] = SnakeHead;
 }
 
 void easysnake::GamePlay::sync() noexcept
