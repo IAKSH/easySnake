@@ -104,7 +104,8 @@ void easysnake::GamePlay::draw() noexcept
 	static std::wstringstream wss;
 	wss.clear();
 	wss.str(L"");
-	wss << "Score:" << std::to_wstring(score);
+	wss << L"Score:" << std::to_wstring(score) << L"    respawn count:" << std::to_wstring(respawnTime);
+	settextcolor(WHITE);
 	outtextxy(0, MAP_SIZE_Y * 10 + 2, wss.str().c_str());
 
 	// Draw Objects
@@ -142,14 +143,14 @@ void easysnake::GamePlay::computing() noexcept
 
 	// realize window shake effect
 	window = GetForegroundWindow();
-	if (window != windowOld)
+	if (true)
 	{
 		GetWindowRect(window, &rectBuffer);
 		windowX = rectBuffer.left;
 		windowY = rectBuffer.top;
 		windowWidth = rectBuffer.right - windowX;
 		windowHight = rectBuffer.bottom - windowY;
-		windowOld = window;
+		//windowOld = window;
 	}
 	switch (shakeCount)
 	{
@@ -235,13 +236,15 @@ void easysnake::GamePlay::computing() noexcept
 	// snake die
 	if (map[newHeadPosY][newHeadPosX] > 0 || map[newHeadPosY][newHeadPosX] == -1)
 	{
-		outtextxy(60, MAP_SIZE_Y * 10 + 2,L"Game Over! But for some reason you will respawn in 3 seconds...");
+		settextcolor(RED);
+		outtextxy(200, MAP_SIZE_Y * 10 + 2,L"Game Over,respawn in 3 seconds...");
 		for (int i = 0; i < 3; i++)
 		{
 			PlaySound(TEXT("score.wav"), nullptr, SND_FILENAME | SND_ASYNC);
 			Sleep(1000); // may not be 1sec
 		}
 		PlaySound(NULL, NULL, 0);// it looks like this can prevent memory leak (by a little)
+		respawnTime++;
 
 		gameShouldBeClosed = true;
 		//exit(0);

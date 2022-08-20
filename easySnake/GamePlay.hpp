@@ -11,6 +11,7 @@ namespace easysnake
 	constexpr int WINDOW_SIZE_H = MAP_SIZE_Y * 10;
 
 	static int score = 0;
+	static int respawnTime = 0;
 	static int loadCount = 0;
 
 	// window shake effect's value
