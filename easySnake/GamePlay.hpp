@@ -36,7 +36,8 @@ namespace easysnake
 		void input() noexcept;
 		void sync() noexcept;
 	private:
-		const float delay;
+		int aimedFps;
+		float delay;
 		using Map = std::array<std::array<int, MAP_SIZE_Y>, MAP_SIZE_X>;
 		Map map;
 		//int map[MAP_SIZE_Y][MAP_SIZE_X];

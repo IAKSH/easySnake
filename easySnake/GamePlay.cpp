@@ -6,7 +6,7 @@
 
 using namespace easysnake;
 
-GamePlay::GamePlay(int fps, const char* title) : delay(1.0f / fps)
+GamePlay::GamePlay(int fps, const char* title)
 {
 	if (!loadCount)
 	{
@@ -48,6 +48,9 @@ GamePlay::GamePlay(int fps, const char* title) : delay(1.0f / fps)
 
 	appleAnimationPosX = applePosX;
 	appleAnimationPosY = applePosY;
+
+	delay = 1.0f / fps;
+	aimedFps = fps;
 }
 
 GamePlay::~GamePlay()
@@ -303,5 +306,7 @@ void easysnake::GamePlay::computing() noexcept
 
 void easysnake::GamePlay::sync() noexcept
 {
+	// more challenge , I hope you will like this.
+	if (score > 10) delay = 1.0f / (aimedFps + (score - 10));
 	Sleep(static_cast<DWORD>(delay * 1000));
 }
