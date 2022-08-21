@@ -53,6 +53,7 @@ GamePlay::GamePlay(int fps, const char* title) : delay(1.0f / fps)
 GamePlay::~GamePlay()
 {
 	//closegraph();
+	foreachMarkDo([](int i, int j, int& mark) {mark = Empty; });
 }
 
 void easysnake::GamePlay::foreachMarkDo(std::function<void(int, int, int&)> func) noexcept
