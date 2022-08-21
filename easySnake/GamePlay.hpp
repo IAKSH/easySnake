@@ -42,11 +42,12 @@ namespace easysnake
 		//int map[MAP_SIZE_Y][MAP_SIZE_X];
 		int snakeMoveDirection = 2;
 		int applePosX, applePosY;
-		int backgroundEffectCount = 0;
 		int appleExplodeCircleEffectPosX;
 		int appleExplodeCircleEffectPosY;
 		int appleExplodeCircleEffectRadius;
-		bool appleExplodeCircleEffectActived = false;
+		bool appleExplodeCircleEffectActived;
+		int appleAnimationPosX, appleAnimationPosY;
+		bool appleAnimationActived;
 		void foreachMarkDo(std::function<void(int, int, int&)>) noexcept;
 	};
 }

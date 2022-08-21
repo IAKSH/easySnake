@@ -45,6 +45,9 @@ GamePlay::GamePlay(int fps, const char* title) : delay(1.0f / fps)
 	applePosX = rand() % (MAP_SIZE_Y - 5) + 2;
 	applePosY = rand() % (MAP_SIZE_X - 5) + 2;
 	map[applePosX][applePosY] = Apple;
+
+	appleAnimationPosX = applePosX;
+	appleAnimationPosY = applePosY;
 }
 
 GamePlay::~GamePlay()
@@ -109,7 +112,7 @@ void easysnake::GamePlay::draw() noexcept
 	outtextxy(0, MAP_SIZE_Y * 10 + 2, wss.str().c_str());
 
 	// Draw Objects
-	foreachMarkDo([](int i, int j, int& mark) {
+	foreachMarkDo([&](int i, int j, int& mark) {
 		if (mark == -1) // wall
 		{
 			setfillcolor(WHITE);
@@ -125,7 +128,7 @@ void easysnake::GamePlay::draw() noexcept
 			setfillcolor(GREEN);
 			solidrectangle(10 * i, 10 * j, 10 * (i + 1), 10 * (j + 1));
 		}
-		else if (mark == -2) // apple
+		else if (mark == -2 && !appleAnimationActived) // apple
 		{
 			setfillcolor(RED);
 			solidrectangle(10 * i, 10 * j, 10 * (i + 1), 10 * (j + 1));
@@ -137,6 +140,14 @@ void easysnake::GamePlay::draw() noexcept
 	{
 		circle(appleExplodeCircleEffectPosX * 10 + 2, appleExplodeCircleEffectPosY * 10 + 2, appleExplodeCircleEffectRadius);
 	}
+
+	// draw our fraking good apple animation
+	if (appleAnimationActived)
+	{
+		setfillcolor(RED);
+		solidrectangle(10 * appleAnimationPosX, 10 * appleAnimationPosY, 10 * (appleAnimationPosX + 1), 10 * (appleAnimationPosY + 1));
+	}
+
 	EndBatchDraw();
 }
 
@@ -146,6 +157,18 @@ void easysnake::GamePlay::computing() noexcept
 	static int newHeadPosY, newHeadPosX;
 	static int i, j;
 	int max = 0;
+
+	// move apple animation
+	if (appleAnimationActived)
+	{
+		if (applePosX > appleAnimationPosX) appleAnimationPosX++;
+		if (applePosX < appleAnimationPosX) appleAnimationPosX--;
+		if (applePosY > appleAnimationPosY) appleAnimationPosY++;
+		if (applePosY < appleAnimationPosY) appleAnimationPosY--;
+
+		// if the apple animation got the right position , terminate it
+		if (appleAnimationPosX == applePosX && appleAnimationPosY == applePosY) appleAnimationActived = false;
+	}
 
 	// apple explode circle effect
 	if (appleExplodeCircleEffectActived)
@@ -229,9 +252,15 @@ void easysnake::GamePlay::computing() noexcept
 	}
 
 	// snake eat
-	if (map[newHeadPosY][newHeadPosX] == Apple)
+	// snake can't eat a moving apple , for sure...
+	if (map[newHeadPosY][newHeadPosX] == Apple && !appleAnimationActived)
 	{
 		score++;
+
+		// enable apple moving animation
+		appleAnimationPosX = applePosX;
+		appleAnimationPosY = applePosY;
+		appleAnimationActived = true;
 
 		// sound
 		PlaySound(TEXT("eat_01.wav"), nullptr, SND_FILENAME | SND_ASYNC);
