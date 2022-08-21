@@ -43,7 +43,10 @@ namespace easysnake
 		int snakeMoveDirection = 2;
 		int applePosX, applePosY;
 		int backgroundEffectCount = 0;
-		bool backgroundEffectRunning = false;
+		int appleExplodeCircleEffectPosX;
+		int appleExplodeCircleEffectPosY;
+		int appleExplodeCircleEffectRadius;
+		bool appleExplodeCircleEffectActived = false;
 		void foreachMarkDo(std::function<void(int, int, int&)>) noexcept;
 	};
 }

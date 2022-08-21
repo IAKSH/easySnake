@@ -131,6 +131,12 @@ void easysnake::GamePlay::draw() noexcept
 			solidrectangle(10 * i, 10 * j, 10 * (i + 1), 10 * (j + 1));
 		}
 	});
+
+	// draw apple explode circle effect
+	if (appleExplodeCircleEffectActived)
+	{
+		circle(appleExplodeCircleEffectPosX * 10 + 2, appleExplodeCircleEffectPosY * 10 + 2, appleExplodeCircleEffectRadius);
+	}
 	EndBatchDraw();
 }
 
@@ -140,6 +146,13 @@ void easysnake::GamePlay::computing() noexcept
 	static int newHeadPosY, newHeadPosX;
 	static int i, j;
 	int max = 0;
+
+	// apple explode circle effect
+	if (appleExplodeCircleEffectActived)
+	{
+		if (appleExplodeCircleEffectRadius < 50) appleExplodeCircleEffectRadius += 10;
+		else appleExplodeCircleEffectActived = false;
+	}
 
 	// realize window shake effect
 	window = GetForegroundWindow();
@@ -225,6 +238,12 @@ void easysnake::GamePlay::computing() noexcept
 
 		// enable window shake effect
 		shakeCount = 4;
+
+		// enable apple explode circle effect
+		appleExplodeCircleEffectPosX = applePosX;
+		appleExplodeCircleEffectPosY = applePosY;
+		appleExplodeCircleEffectRadius = 1;
+		appleExplodeCircleEffectActived = true;
 
 		map[applePosX][applePosY] = Empty;
 		applePosX = rand() % (MAP_SIZE_Y - 5) + 2;
